@@ -1,0 +1,1003 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NLP Knowledge Artifact | Gujarati Autocomplete</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --accent: #22d3ee;
+            --text: #1e2937;
+            --bg: #f8fafc;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+        
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.15);
+        }
+        
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        
+        .nav-menu a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-menu a:hover:after,
+        .nav-menu a.active:after {
+            width: 100%;
+        }
+        
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #6366f1 0%, #22d3ee 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27100%27 height=%27100%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3Eન%3C/text%3E%3C/svg%27') repeat;
+            opacity: 0.08;
+        }
+        
+        .hero-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            z-index: 2;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 9999px;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .hero .subheading {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+        
+        .hero p {
+            max-width: 620px;
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2.5rem;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 32px;
+            border-radius: 9999px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            cursor: pointer;
+            border: none;
+            font-size: 1.05rem;
+        }
+        
+        .btn-primary {
+            background: white;
+            color: #4f46e5;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.8);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-4px);
+        }
+        
+        section {
+            padding: 6rem 0;
+        }
+        
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            font-weight: 700;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            display: block;
+            margin: 16px auto;
+            border-radius: 9999px;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        
+        .topic-card {
+            border-radius: 24px;
+            padding: 2rem;
+            height: 100%;
+            transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .topic-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.15);
+        }
+        
+        .topic-icon {
+            font-size: 3rem;
+            margin-bottom: 1.25rem;
+            display: block;
+        }
+        
+        .repo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .repo-card {
+            border-radius: 20px;
+            padding: 1.75rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .repo-card:hover {
+            transform: scale(1.04);
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 3rem auto;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, #6366f1, #22d3ee);
+            transform: translateX(-50%);
+        }
+        
+        .timeline-step {
+            margin: 3rem 0;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            position: relative;
+        }
+        
+        .timeline-step:nth-child(odd) {
+            flex-direction: row;
+        }
+        
+        .timeline-step:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .timeline-content {
+            flex: 1;
+            padding: 1.5rem 2rem;
+            border-radius: 20px;
+            position: relative;
+        }
+        
+        .timeline-dot {
+            width: 28px;
+            height: 28px;
+            background: white;
+            border: 4px solid #6366f1;
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: #6366f1;
+            font-weight: bold;
+        }
+        
+        .assignment-panel {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border-radius: 24px;
+            padding: 3rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            border: 1px solid #bae6fd;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #1e40af;
+        }
+        
+        footer {
+            background: #1e2937;
+            color: #cbd5e1;
+            padding: 4rem 0 2rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 3rem;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            z-index: 9999;
+            transition: width 0.1s;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-on-scroll {
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .guj-text {
+            font-family: system-ui;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div id="progress-bar" class="scroll-progress" style="width: 0%"></div>
+
+    <!-- Navigation -->
+    <nav class="nav glass">
+        <div class="nav-container">
+            <div class="logo">
+                <span style="font-size: 2rem;">📖</span>
+                NLP Gujarati
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="concept-cards.html">Concept Cards</a></li>
+                <li><a href="comparative-analysis.html">Comparative Analysis</a></li>
+                <li><a href="workflow-diagrams.html">Workflow Diagrams</a></li>
+                <li><a href="applications.html">Applications</a></li>
+                <li><a href="research-industry.html">Research &amp; Industry</a></li>
+                <li><a href="sustainability.html">Sustainability</a></li>
+                <li><a href="references.html">References</a></li>
+                <li><a href="contribution.html">Contribution</a></li>
+            </ul>
+            <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" 
+                    style="background: none; border: none; font-size: 1.4rem; cursor: pointer;">
+                ↑
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <header id="home" class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>🇮🇳</span>
+                <span>SEMESTER V • 2026–27</span>
+            </div>
+            
+            <h1>Knowledge Artifact Repository</h1>
+            <p class="subheading">Understanding Week 1 NLP Concepts through Gujarati Autocomplete &amp; Predictive Text</p>
+            
+            <p style="max-width: 620px; font-size: 1.25rem;">
+                This repository has been developed as part of the Natural Language Processing course to organize and explain 
+                the Week 1 concepts of NLP. It demonstrates how text preprocessing, feature engineering, language representation, 
+                and language models work together to enable Gujarati autocomplete and predictive text systems.
+            </p>
+            
+            <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 2rem;">
+                <a href="#overview" onclick="document.getElementById('overview').scrollIntoView({ behavior: 'smooth' })" 
+                   class="btn btn-primary">Explore Repository</a>
+                <a href="#workflow-preview" onclick="document.getElementById('workflow-preview').scrollIntoView({ behavior: 'smooth' })" 
+                   class="btn btn-secondary">View Workflow</a>
+            </div>
+            
+            <div style="margin-top: 4rem; display: flex; gap: 3rem; flex-wrap: wrap; justify-content: center; font-size: 1.1rem;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 2rem;">🔤</span>
+                    <div>
+                        <div style="font-weight: 600;">Gujarati Focus</div>
+                        <div style="opacity: 0.85;">ગુજરાતી ભાષા</div>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 2rem;">✨</span>
+                    <div>
+                        <div style="font-weight: 600;">Real Application</div>
+                        <div style="opacity: 0.85;">Autocomplete System</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating Gujarati text -->
+        <div style="position: absolute; bottom: 15%; right: 8%; font-size: 6rem; opacity: 0.1; transform: rotate(-12deg); pointer-events: none;">
+            નમસ્તે
+        </div>
+    </header>
+
+    <!-- ABOUT / OBJECTIVE -->
+    <section id="overview" style="background: white;">
+        <div class="container">
+            <h2 class="section-title">Repository Objective</h2>
+            
+            <div class="glass" style="max-width: 820px; margin: 0 auto; padding: 3rem; border-radius: 28px; text-align: center;">
+                <p style="font-size: 1.3rem; margin-bottom: 2rem;">
+                    This Knowledge Artifact Repository helps beginners understand core NLP concepts by answering:
+                </p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; text-align: left;">
+                    <div style="padding: 1rem; background: rgba(99, 102, 241, 0.08); border-radius: 16px;">
+                        <strong style="color: var(--primary);">What</strong><br>
+                        <span style="font-size: 0.95rem;">each NLP technique is</span>
+                    </div>
+                    <div style="padding: 1rem; background: rgba(99, 102, 241, 0.08); border-radius: 16px;">
+                        <strong style="color: var(--primary);">Why</strong><br>
+                        <span style="font-size: 0.95rem;">it is required</span>
+                    </div>
+                    <div style="padding: 1rem; background: rgba(99, 102, 241, 0.08); border-radius: 16px;">
+                        <strong style="color: var(--primary);">How</strong><br>
+                        <span style="font-size: 0.95rem;">it works in practice</span>
+                    </div>
+                    <div style="padding: 1rem; background: rgba(99, 102, 241, 0.08); border-radius: 16px;">
+                        <strong style="color: var(--primary);">When</strong><br>
+                        <span style="font-size: 0.95rem;">to use each technique</span>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 2.5rem; padding-top: 2rem; border-top: 1px dashed #64748b;">
+                    <p style="font-size: 1.1rem;">
+                        <strong>Focus:</strong> Week 1 topics only — Text Preprocessing, Feature Engineering, 
+                        Language Representation, and Language Models applied to Gujarati language for autocomplete &amp; predictive text.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TOPICS COVERED -->
+    <section style="background: #f8fafc;">
+        <div class="container">
+            <h2 class="section-title">Topics Covered</h2>
+            
+            <div class="cards-grid">
+                <!-- Card 1 -->
+                <div class="topic-card glass">
+                    <span class="topic-icon">🧹</span>
+                    <h3 style="font-size: 1.6rem; margin-bottom: 1rem;">Text Preprocessing</h3>
+                    <p style="margin-bottom: 1.5rem; color: #475569;">Foundational steps to clean and prepare raw Gujarati text for further processing.</p>
+                    <ul style="font-size: 0.95rem; line-height: 1.8; color: #334155;">
+                        <li>• Sentence Segmentation</li>
+                        <li>• Tokenization</li>
+                        <li>• Case Normalization</li>
+                        <li>• Stop-word Removal</li>
+                        <li>• Stemming &amp; Lemmatization</li>
+                        <li>• Noise Removal</li>
+                    </ul>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="topic-card glass">
+                    <span class="topic-icon">📊</span>
+                    <h3 style="font-size: 1.6rem; margin-bottom: 1rem;">Feature Engineering</h3>
+                    <p style="margin-bottom: 1.5rem; color: #475569;">Transforming text into numerical features that capture linguistic patterns.</p>
+                    <ul style="font-size: 0.95rem; line-height: 1.8; color: #334155;">
+                        <li>• Bag of Words</li>
+                        <li>• N-Grams</li>
+                        <li>• Term Frequency (TF)</li>
+                        <li>• Inverse Document Frequency (IDF)</li>
+                        <li>• TF-IDF Vectorization</li>
+                    </ul>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="topic-card glass">
+                    <span class="topic-icon">🔢</span>
+                    <h3 style="font-size: 1.6rem; margin-bottom: 1rem;">Language Representation</h3>
+                    <p style="margin-bottom: 1.5rem; color: #475569;">Representing Gujarati words and sentences in dense vector spaces.</p>
+                    <ul style="font-size: 0.95rem; line-height: 1.8; color: #334155;">
+                        <li>• One-Hot Encoding</li>
+                        <li>• Word Embeddings</li>
+                        <li>• Word2Vec</li>
+                        <li>• FastText</li>
+                        <li>• Contextual Embeddings</li>
+                    </ul>
+                </div>
+                
+                <!-- Card 4 -->
+                <div class="topic-card glass">
+                    <span class="topic-icon">🧠</span>
+                    <h3 style="font-size: 1.6rem; margin-bottom: 1rem;">Language Models</h3>
+                    <p style="margin-bottom: 1.5rem; color: #475569;">Statistical and neural models that predict the next word in a Gujarati sequence.</p>
+                    <ul style="font-size: 0.95rem; line-height: 1.8; color: #334155;">
+                        <li>• Statistical Language Models</li>
+                        <li>• Neural Language Models</li>
+                        <li>• Transformer-based Representations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED APPLICATION -->
+    <section id="featured-app" style="background: white;">
+        <div class="container">
+            <h2 class="section-title">Featured Application</h2>
+            
+            <div style="text-align: center; max-width: 700px; margin: 0 auto 4rem;">
+                <h3 style="font-size: 2rem; margin-bottom: 1rem;">Gujarati Autocomplete &amp; Predictive Text</h3>
+                <p style="font-size: 1.25rem; color: #475569;">
+                    Week 1 NLP techniques work in harmony to convert raw Gujarati input into intelligent, context-aware word suggestions.
+                </p>
+            </div>
+            
+            <!-- Simple interactive demo -->
+            <div class="glass" style="max-width: 620px; margin: 0 auto; padding: 2.5rem; border-radius: 24px;">
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="font-size: 0.95rem; display: block; margin-bottom: 8px; color: #64748b;">Type a Gujarati phrase:</label>
+                    <input id="demo-input" type="text" 
+                           placeholder="તમે કેમ છો" 
+                           style="width: 100%; padding: 16px 20px; border-radius: 9999px; border: 2px solid #e2e8f0; font-size: 1.1rem; outline: none;">
+                </div>
+                
+                <div id="suggestions" style="display: flex; flex-wrap: wrap; gap: 12px; min-height: 120px;">
+                    <!-- JS populated -->
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem; font-size: 0.95rem; color: #64748b;">
+                Try typing: "હું" or "તમે" • Suggestions powered by simulated TF-IDF + N-gram model
+            </div>
+        </div>
+    </section>
+
+    <!-- REPOSITORY STRUCTURE -->
+    <section style="background: #f8fafc;" id="repo-structure">
+        <div class="container">
+            <h2 class="section-title">Repository Structure</h2>
+            <p style="text-align: center; max-width: 600px; margin: 0 auto 3rem; color: #475569;">
+                Navigate to detailed sections of this academic project
+            </p>
+            
+            <div class="repo-grid">
+                <div onclick="window.location.href='concept-cards.html'" class="repo-card glass" style="cursor: pointer;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📇</div>
+                    <h4 style="font-size: 1.35rem; margin-bottom: 0.5rem;">Concept Cards</h4>
+                    <p style="font-size: 0.95rem; color: #64748b;">Detailed explanations of all Week 1 NLP techniques with examples</p>
+                    <button class="btn btn-primary" style="margin-top: 1.25rem; font-size: 0.95rem; padding: 10px 24px;">Open Page</button>
+                </div>
+                
+                <div onclick="window.location.href='comparative-analysis.html'" class="repo-card glass" style="cursor: pointer;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">⚖️</div>
+                    <h4 style="font-size: 1.35rem; margin-bottom: 0.5rem;">Comparative Analysis</h4>
+                    <p style="font-size: 0.95rem; color: #64748b;">Stemming vs Lemmatization, BoW vs TF-IDF, etc.</p>
+                    <button class="btn btn-primary" style="margin-top: 1.25rem; font-size: 0.95rem; padding: 10px 24px;">Open Page</button>
+                </div>
+                
+                <div onclick="window.location.href='workflow-diagrams.html'" class="repo-card glass" style="cursor: pointer;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📈</div>
+                    <h4 style="font-size: 1.35rem; margin-bottom: 0.5rem;">Workflow Diagrams</h4>
+                    <p style="font-size: 0.95rem; color: #64748b;">End-to-end visual flow of the Gujarati autocomplete pipeline</p>
+                    <button class="btn btn-primary" style="margin-top: 1.25rem; font-size: 0.95rem; padding: 10px 24px;">Open Page</button>
+                </div>
+                
+                <div onclick="window.location.href='applications.html'" class="repo-card glass" style="cursor: pointer;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🚀</div>
+                    <h4 style="font-size: 1.35rem; margin-bottom: 0.5rem;">Applications</h4>
+                    <p style="font-size: 0.95rem; color: #64748b;">Real-world usage of these techniques in industry</p>
+                    <button class="btn btn-primary" style="margin-top: 1.25rem; font-size: 0.95rem; padding: 10px 24px;">Open Page</button>
+                </div>
+                
+                <div onclick="window.location.href='research-industry.html'" class="repo-card glass" style="cursor: pointer;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🔬</div>
+                    <h4 style="font-size: 1.35rem; margin-bottom: 0.5rem;">Research &amp; Industry</h4>
+                    <p style="font-size: 0.95rem; color: #64748b;">Key papers and tools in modern NLP</p>
+                    <button class="btn btn-primary" style="margin-top: 1.25rem; font-size: 0.95rem; padding: 10px 24px;">Open Page</button>
+                </div>
+                
+                <div onclick="window.location.href='sustainability.html'" class="repo-card glass" style="cursor: pointer;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🌱</div>
+                    <h4 style="font-size: 1.35rem; margin-bottom: 0.5rem;">Sustainability</h4>
+                    <p style="font-size: 0.95rem; color: #64748b;">Green AI and efficient language processing</p>
+                    <button class="btn btn-primary" style="margin-top: 1.25rem; font-size: 0.95rem; padding: 10px 24px;">Open Page</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPECTED LEARNING OUTCOMES -->
+    <section style="background: white;">
+        <div class="container">
+            <h2 class="section-title">Expected Learning Outcomes</h2>
+            
+            <div class="cards-grid">
+                <div class="glass" style="padding: 2rem; border-radius: 20px;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">📝</div>
+                    <h4>How raw Gujarati text is processed</h4>
+                </div>
+                <div class="glass" style="padding: 2rem; border-radius: 20px;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">📐</div>
+                    <h4>How words become numerical vectors</h4>
+                </div>
+                <div class="glass" style="padding: 2rem; border-radius: 20px;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">📏</div>
+                    <h4>Feature extraction techniques</h4>
+                </div>
+                <div class="glass" style="padding: 2rem; border-radius: 20px;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🌐</div>
+                    <h4>Meaning captured in embeddings</h4>
+                </div>
+                <div class="glass" style="padding: 2rem; border-radius: 20px;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🔮</div>
+                    <h4>How language models predict next tokens</h4>
+                </div>
+                <div class="glass" style="padding: 2rem; border-radius: 20px;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">⌨️</div>
+                    <h4>Building practical autocomplete systems</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ASSIGNMENT SNAPSHOT -->
+    <section style="background: #f8fafc;">
+        <div class="container">
+            <h2 class="section-title">Assignment Snapshot</h2>
+            
+            <div class="assignment-panel glass">
+                <div class="stat">
+                    <div class="stat-value">NLP</div>
+                    <div style="margin-top: 8px; font-weight: 500;">Course</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">2026–27</div>
+                    <div style="margin-top: 8px; font-weight: 500;">Academic Year</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">V</div>
+                    <div style="margin-top: 8px; font-weight: 500;">Semester</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">🇮🇳</div>
+                    <div style="margin-top: 8px; font-weight: 500;">Gujarati</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">🔤</div>
+                    <div style="margin-top: 8px; font-weight: 500;">Autocomplete</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">📄</div>
+                    <div style="margin-top: 8px; font-weight: 500;">GitHub Pages</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WORKFLOW PREVIEW -->
+    <section id="workflow-preview" style="background: white;">
+        <div class="container">
+            <h2 class="section-title">Workflow Preview</h2>
+            
+            <div class="timeline">
+                <div class="timeline-step">
+                    <div class="timeline-content glass" style="text-align: center;">
+                        <strong>Raw Gujarati Text</strong><br>
+                        <span class="guj-text">હું આજે શું કરું?</span>
+                    </div>
+                    <div class="timeline-dot">1</div>
+                </div>
+                
+                <div class="timeline-step">
+                    <div class="timeline-content glass" style="text-align: center;">
+                        <strong>Text Preprocessing</strong><br>
+                        <span style="font-size: 0.9rem;">Tokenization • Cleaning</span>
+                    </div>
+                    <div class="timeline-dot">2</div>
+                </div>
+                
+                <div class="timeline-step">
+                    <div class="timeline-content glass" style="text-align: center;">
+                        <strong>Feature Engineering</strong><br>
+                        <span style="font-size: 0.9rem;">TF-IDF • N-grams</span>
+                    </div>
+                    <div class="timeline-dot">3</div>
+                </div>
+                
+                <div class="timeline-step">
+                    <div class="timeline-content glass" style="text-align: center;">
+                        <strong>Language Representation</strong><br>
+                        <span style="font-size: 0.9rem;">Embeddings</span>
+                    </div>
+                    <div class="timeline-dot">4</div>
+                </div>
+                
+                <div class="timeline-step">
+                    <div class="timeline-content glass" style="text-align: center;">
+                        <strong>Language Model</strong><br>
+                        <span style="font-size: 0.9rem;">Prediction Engine</span>
+                    </div>
+                    <div class="timeline-dot">5</div>
+                </div>
+                
+                <div class="timeline-step">
+                    <div class="timeline-content glass" style="text-align: center; background: linear-gradient(90deg, #6366f1, #22d3ee); color: white;">
+                        <strong>Autocomplete Output</strong><br>
+                        <span style="font-size: 1.1rem;">હું આજે <strong>શાળા જાઉં</strong></span>
+                    </div>
+                    <div class="timeline-dot">6</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <div style="font-size: 1.8rem; font-weight: 700; color: white; margin-bottom: 1rem;">📖 NLP Gujarati</div>
+                <p style="max-width: 280px;">Knowledge Artifact Repository for Natural Language Processing</p>
+            </div>
+            
+            <div>
+                <div style="font-weight: 600; margin-bottom: 1rem; color: #e2e8f0;">Quick Links</div>
+                <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.95rem;">
+                    <a href="#home" style="color: #cbd5e1; text-decoration: none;">Home</a>
+                    <a href="concept-cards.html" style="color: #cbd5e1; text-decoration: none;">Concept Cards</a>
+                    <a href="workflow-diagrams.html" style="color: #cbd5e1; text-decoration: none;">Workflow</a>
+                </div>
+            </div>
+            
+            <div>
+                <div style="font-weight: 600; margin-bottom: 1rem; color: #e2e8f0;">Course Info</div>
+                <div style="font-size: 0.95rem; line-height: 1.8;">
+                    Natural Language Processing<br>
+                    Semester V • 2026–27<br>
+                    Gujarati Language Focus<br>
+                    Autocomplete &amp; Predictive Text
+                </div>
+            </div>
+            
+            <div>
+                <div style="font-weight: 600; margin-bottom: 1rem; color: #e2e8f0;">Made for</div>
+                <p style="font-size: 0.95rem;">University Project Showcase</p>
+                <p style="margin-top: 2rem; font-size: 0.85rem; opacity: 0.7;">
+                    Single file HTML demonstration<br>
+                    Fully responsive &amp; accessible
+                </p>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 5rem; padding-top: 2rem; border-top: 1px solid #334155; font-size: 0.9rem; opacity: 0.6;">
+            © 2026 Knowledge Artifact Repository • Natural Language Processing
+        </div>
+    </footer>
+
+    <!-- Back to top -->
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" 
+            style="position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 1.4rem; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2); cursor: pointer; z-index: 100; display: none;"
+            id="back-to-top">
+        ↑
+    </button>
+
+    <script>
+        // Progress bar
+        function updateProgressBar() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+        }
+        
+        window.onscroll = function() {
+            updateProgressBar();
+            toggleBackToTop();
+        };
+        
+        // Back to top button
+        function toggleBackToTop() {
+            const btn = document.getElementById("back-to-top");
+            if (document.documentElement.scrollTop > 500) {
+                btn.style.display = "flex";
+                btn.style.alignItems = "center";
+                btn.style.justifyContent = "center";
+            } else {
+                btn.style.display = "none";
+            }
+        }
+        
+        // Active nav link
+        function setActiveNav() {
+            const sections = ['home', 'overview', 'featured-app', 'repo-structure', 'workflow-preview'];
+            const navLinks = document.querySelectorAll('.nav-menu a');
+            
+            window.addEventListener('scroll', () => {
+                let current = '';
+                
+                sections.forEach(sectionId => {
+                    const section = document.getElementById(sectionId);
+                    if (!section) return;
+                    const sectionTop = section.offsetTop;
+                    if (scrollY >= sectionTop - 300) {
+                        current = sectionId;
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        }
+        
+        // Scroll animations
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.15
+            });
+            
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.add('animate-on-scroll');
+                observer.observe(section);
+            });
+        }
+        
+        // Simple autocomplete demo
+        function initDemo() {
+            const input = document.getElementById('demo-input');
+            const suggestionsContainer = document.getElementById('suggestions');
+            
+            const sampleSuggestions = {
+                'હું': ['હું આજે', 'હું ઘરે', 'હું તમને'],
+                'તમે': ['તમે કેમ', 'તમે જાઓ', 'તમે શું'],
+                'આજે': ['આજે શું', 'આજે વરસાદ', 'આજે ખુશ'],
+                '': ['નમસ્તે', 'કેમ છો', 'શુભેસ્છા']
+            };
+            
+            function showSuggestions(text) {
+                suggestionsContainer.innerHTML = '';
+                
+                let key = '';
+                if (text.includes('હું')) key = 'હું';
+                else if (text.includes('તમે')) key = 'તમે';
+                else if (text.includes('આજે')) key = 'આજે';
+                
+                const words = sampleSuggestions[key] || sampleSuggestions[''];
+                
+                words.forEach(word => {
+                    const pill = document.createElement('div');
+                    pill.style.cssText = `
+                        background: #f1f5f9;
+                        padding: 10px 22px;
+                        border-radius: 9999px;
+                        font-size: 1rem;
+                        cursor: pointer;
+                        transition: all 0.2s;
+                        border: 1px solid #e2e8f0;
+                    `;
+                    pill.textContent = word;
+                    pill.onclick = () => {
+                        input.value = word;
+                        suggestionsContainer.innerHTML = `<div style="padding: 20px; color: #64748b; font-style: italic;">Suggestion selected: ${word} ✓</div>`;
+                    };
+                    suggestionsContainer.appendChild(pill);
+                });
+            }
+            
+            input.addEventListener('input', (e) => {
+                showSuggestions(e.target.value);
+            });
+            
+            // Initial suggestions
+            setTimeout(() => {
+                showSuggestions('');
+            }, 1200);
+        }
+        
+        // Smooth scrolling for all anchor links
+        function smoothScrollLinks() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    if (this.getAttribute('href') === '#') return;
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const target = document.getElementById(targetId);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+        
+        // Keyboard support
+        function keyboardShortcuts() {
+            document.addEventListener('keydown', (e) => {
+                if (e.key === '/' && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA") {
+                    e.preventDefault();
+                    const demoInput = document.getElementById('demo-input');
+                    if (demoInput) demoInput.focus();
+                }
+            });
+        }
+        
+        // Initialize everything
+        function initialize() {
+            // Make repo cards look clickable
+            updateProgressBar();
+            setActiveNav();
+            animateOnScroll();
+            initDemo();
+            smoothScrollLinks();
+            keyboardShortcuts();
+            
+            // Make the hero more engaging
+            console.log('%c✅ NLP Gujarati Knowledge Repository loaded successfully!', 
+                        'color: #6366f1; font-family: monospace; font-size: 13px');
+        }
+        
+        // Run on load
+        window.onload = initialize;
+    </script>
+</body>
+</html>
+```
