@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section C: Workflow Diagrams | NLP Repository</title>
+    <!-- Include Mermaid.js for rendering -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    </script>
+    <style>
+        :root { --bg: #121212; --surface: #1e1e1e; --accent: #10b981; --text: #e2e8f0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 2rem; line-height: 1.6; }
+        .back-link { color: var(--accent); text-decoration: none; display: inline-block; margin-bottom: 2rem; }
+        .diagram-container { background: var(--surface); padding: 2rem; border-radius: 12px; margin-bottom: 3rem; }
+        .member-tag { font-size: 0.8rem; background: #333; padding: 0.2rem 0.5rem; border-radius: 4px; color: #aaa; margin-bottom: 1rem; display: inline-block; }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← Back to Dashboard</a>
+    <h1>Section C: Workflow Diagrams</h1>
+
+    <!-- Heet Lakhani's Contribution -->
+    <div class="diagram-container">
+        <span class="member-tag">Heet Lakhani (124BTCM1105)</span>
+        <h2>Text Preprocessing Pipeline</h2>
+        <pre class="mermaid">
+        graph LR
+            A[Raw Text] --> B(Case Normalization)
+            B --> C(Tokenization)
+            C --> D(Stop Word Removal)
+            D --> E(Stemming/Lemmatization)
+            E --> F[Cleaned Corpus]
+        </pre>
+    </div>
+
+    <!-- Anand Raghvani's Contribution -->
+    <div class="diagram-container">
+        <span class="member-tag">Anand Raghvani (124BTCM1113)</span>
+        <h2>Feature Engineering Pipeline</h2>
+        <pre class="mermaid">
+        graph LR
+            A[Cleaned Corpus] --> B{Choose Method}
+            B -->|Frequency| C(TF-IDF)
+            B -->|Contextual| D(Word Embeddings)
+            C --> E[Feature Vector]
+            D --> E
+            E --> F[Model Input]
+        </pre>
+    </div>
+</body>
+</html>
