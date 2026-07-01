@@ -10,16 +10,16 @@ This repository represents the collaborative work of the NLP Knowledge Engineeri
 
 | Activity | Assigned To | Details of Contribution |
 | :--- | :--- | :--- |
-| **Concept Card 1** | Heet Lakhani | [Tokenization] |
-| **Concept Card 2** | Heet Lakhani | [Bag of Words] |
-| **Concept Card 3** | Heet Lakhani | [Word Embeddings] |
-| **Concept Card 1** | Anand Raghvani | [ Transformer-based Representations] |
-| **Concept Card 2** | Anand Raghvani | [Case Normalization] |
-| **Comparative Analysis** | Heet Lakhani | [Stemming vs Lemmatization] |
-| **Comparative Analysis** | Anand Raghvani | [TF vs TF-IDF] |
-| **Comparative Analysis** | Anand Raghvani | [Word2Vec vs. FastText] |
-| **Workflow Diagram** | Heet Lakhani | [Text Preprocessing Pipeline] |
-| **Workflow Diagram** | Anand Raghvani | [Feature Engineering Pipeline] |
+| **Concept Card 1** | Heet Lakhani | Tokenization |
+| **Concept Card 2** | Heet Lakhani | Bag of Words |
+| **Concept Card 3** | Heet Lakhani | Word Embeddings |
+| **Concept Card 1** | Anand Raghvani | Transformer-based Representations |
+| **Concept Card 2** | Anand Raghvani | Case Normalization |
+| **Comparative Analysis** | Heet Lakhani | Stemming vs Lemmatization |
+| **Comparative Analysis** | Anand Raghvani | TF vs TF-IDF |
+| **Comparative Analysis** | Anand Raghvani | Word2Vec vs. FastText |
+| **Workflow Diagram** | Heet Lakhani | Text Preprocessing Pipeline |
+| **Workflow Diagram** | Anand Raghvani | Feature Engineering Pipeline |
 | **Reflection Note** | Heet Lakhani | Reflecting on NLP challenges |
 | **Reflection Note** | Anand Raghvani | Reflecting on NLP challenges |
 
