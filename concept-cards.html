@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section A: Concept Cards | NLP Repository</title>
+    <style>
+        :root { --bg: #121212; --surface: #1e1e1e; --accent: #10b981; --text: #e2e8f0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 2rem; line-height: 1.6; }
+        .back-link { color: var(--accent); text-decoration: none; display: inline-block; margin-bottom: 2rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; }
+        .card { background: var(--surface); padding: 2rem; border-radius: 12px; border-left: 4px solid var(--accent); }
+        h2 { color: var(--accent); }
+        .member-tag { font-size: 0.8rem; background: #333; padding: 0.2rem 0.5rem; border-radius: 4px; color: #aaa; }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← Back to Dashboard</a>
+    <h1>Section A: Concept Cards</h1>
+    
+    <div class="grid">
+        <!-- Heet Lakhani's Contributions -->
+        <div class="card">
+            <span class="member-tag">Heet Lakhani (124BTCM1105)</span>
+            <h2>1. Tokenization</h2>
+            <p><strong>Definition:</strong> Breaking down text into smaller units (tokens) like words or subwords.</p>
+            <p><strong>Purpose:</strong> Fundamental step to make text processable by algorithms.</p>
+            <p><strong>Example:</strong> "Hello world" → ["Hello", "world"]</p>
+        </div>
+
+        <div class="card">
+            <span class="member-tag">Heet Lakhani (124BTCM1105)</span>
+            <h2>2. Bag of Words (BoW)</h2>
+            <p><strong>Definition:</strong> A simple representation model that counts word frequencies regardless of order.</p>
+            <p><strong>Why:</strong> Provides a numerical basis for classification tasks.</p>
+            <p><strong>Limitations:</strong> Ignores grammar, structure, and context.</p>
+        </div>
+
+        <div class="card">
+            <span class="member-tag">Heet Lakhani (124BTCM1105)</span>
+            <h2>3. Word Embeddings</h2>
+            <p><strong>Definition:</strong> Dense vector representation of words in continuous vector space.</p>
+            <p><strong>How:</strong> Maps similar words to nearby points in geometric space.</p>
+            <p><strong>Application:</strong> Sentiment analysis, recommendation engines.</p>
+        </div>
+
+        <!-- Anand Raghvani's Contributions -->
+        <div class="card">
+            <span class="member-tag">Anand Raghvani (124BTCM1113)</span>
+            <h2>4. Transformer-based Representations</h2>
+            <p><strong>Definition:</strong> Models using self-attention to capture long-range dependencies.</p>
+            <p><strong>Working:</strong> Learns context by weighing the influence of all words in a sequence simultaneously.</p>
+            <p><strong>Application:</strong> Modern LLMs (BERT, GPT).</p>
+        </div>
+
+        <div class="card">
+            <span class="member-tag">Anand Raghvani (124BTCM1113)</span>
+            <h2>5. Case Normalization</h2>
+            <p><strong>Definition:</strong> Converting all text to a uniform case (usually lowercase).</p>
+            <p><strong>Purpose:</strong> Reduces vocabulary size; treats "Apple" and "apple" as the same token.</p>
+            <p><strong>Example:</strong> "NLP is Great" → "nlp is great"</p>
+        </div>
+    </div>
+</body>
+</html>

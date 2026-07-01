@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section B: Comparative Analysis | NLP Repository</title>
+    <style>
+        :root { --bg: #121212; --surface: #1e1e1e; --accent: #10b981; --text: #e2e8f0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 2rem; line-height: 1.6; }
+        .back-link { color: var(--accent); text-decoration: none; display: inline-block; margin-bottom: 2rem; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 3rem; background: var(--surface); border-radius: 8px; overflow: hidden; font-size: 0.9rem; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #333; }
+        th { background: #252525; color: var(--accent); }
+        .member-tag { font-size: 0.8rem; background: #333; padding: 0.2rem 0.5rem; border-radius: 4px; color: #aaa; margin-bottom: 0.5rem; display: inline-block; }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← Back to Dashboard</a>
+    <h1>Section B: Comparative Analysis</h1>
+
+    <!-- Heet Lakhani's Contribution -->
+    <div>
+        <span class="member-tag">Heet Lakhani (124BTCM1105)</span>
+        <h2>1. Stemming vs. Lemmatization</h2>
+        <table>
+            <tr><th>Criteria</th><th>Stemming</th><th>Lemmatization</th></tr>
+            <tr><td>Mechanism</td><td>Rule-based (suffix truncation)</td><td>Morphological/Lexical analysis</td></tr>
+            <tr><td>Complexity</td><td>Low</td><td>High (needs dictionaries)</td></tr>
+            <tr><td>Strengths</td><td>Fast, simple</td><td>Accurate, context-aware</td></tr>
+            <tr><td>Weaknesses</td><td>Often results in non-words</td><td>Computationally heavy</td></tr>
+            <tr><td>Applications</td><td>Search engines, indexing</td><td>Question answering, chatbots</td></tr>
+        </table>
+    </div>
+
+    <!-- Anand Raghvani's Contributions -->
+    <div>
+        <span class="member-tag">Anand Raghvani (124BTCM1113)</span>
+        <h2>2. TF vs. TF-IDF</h2>
+        <table>
+            <tr><th>Criteria</th><th>TF</th><th>TF-IDF</th></tr>
+            <tr><td>Mechanism</td><td>Raw count frequency</td><td>Frequency adjusted by IDF</td></tr>
+            <tr><td>Complexity</td><td>O(n)</td><td>O(n log n)</td></tr>
+            <tr><td>Strengths</td><td>Simple, fast</td><td>Reduces impact of common words</td></tr>
+            <tr><td>Weaknesses</td><td>Overemphasizes common words</td><td>Requires corpus statistics</td></tr>
+            <tr><td>Applications</td><td>Basic text retrieval</td><td>Document ranking, keyword extraction</td></tr>
+        </table>
+    </div>
+
+    <div>
+        <span class="member-tag">Anand Raghvani (124BTCM1113)</span>
+        <h2>3. Word2Vec vs. FastText</h2>
+        <table>
+            <tr><th>Criteria</th><th>Word2Vec</th><th>FastText</th></tr>
+            <tr><td>Mechanism</td><td>Word-level CBOW/Skip-gram</td><td>Character n-gram based</td></tr>
+            <tr><td>Complexity</td><td>Moderate</td><td>High (due to n-grams)</td></tr>
+            <tr><td>Strengths</td><td>Fast, global context</td><td>Handles OOV/typos well</td></tr>
+            <tr><td>Weaknesses</td><td>Cannot handle new words</td><td>Memory intensive</td></tr>
+            <tr><td>Applications</td><td>Standard embeddings</td><td>Morphologically rich languages</td></tr>
+        </table>
+    </div>
+</body>
+</html>
